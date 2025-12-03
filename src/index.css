@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-white text-black font-mono antialiased;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply font-sans font-bold uppercase tracking-tight;
+    }
+}
+
+@layer components {
+    .btn-brutal {
+        @apply px-6 py-3 border border-black bg-white text-black hover:bg-black hover:text-white transition-colors duration-0 uppercase font-bold text-sm tracking-wider flex items-center justify-center gap-2;
+    }
+
+    .card-brutal {
+        @apply border border-black bg-white p-4;
+    }
+
+    .input-brutal {
+        @apply w-full border border-black bg-white px-4 py-2 font-mono text-sm focus:outline-none focus:ring-1 focus:ring-black rounded-none;
+    }
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-marquee {
+    animation: marquee 20s linear infinite;
+}
