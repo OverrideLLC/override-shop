@@ -25,7 +25,7 @@ export const CartSidebar = () => {
             >
                 <div className="flex h-full flex-col">
                     <div className="flex items-center justify-between border-b border-black p-4">
-                        <h2 className="font-bold text-lg">SYSTEM_CART</h2>
+                        <h2 className="font-bold text-lg">SISTEMA_CARRITO</h2>
                         <button
                             onClick={() => setIsCartOpen(false)}
                             className="p-2 hover:bg-black hover:text-white transition-colors"
@@ -37,8 +37,8 @@ export const CartSidebar = () => {
                     <div className="flex-1 overflow-y-auto p-4">
                         {items.length === 0 ? (
                             <div className="flex h-full flex-col items-center justify-center text-center opacity-50">
-                                <p className="font-mono">Cart is empty.</p>
-                                <p className="font-mono text-sm mt-2">Execute add_to_cart() to proceed.</p>
+                                <p className="font-mono">El carrito está vacío.</p>
+                                <p className="font-mono text-sm mt-2">Ejecuta add_to_cart() para continuar.</p>
                             </div>
                         ) : (
                             <div className="space-y-4">
@@ -52,8 +52,8 @@ export const CartSidebar = () => {
                                         <div className="flex-1">
                                             <h3 className="font-bold text-sm">{item.name}</h3>
                                             <p className="font-mono text-xs text-gray-600">
-                                                {item.selectedSize && `Size: ${item.selectedSize} | `}
-                                                Qty: {item.quantity}
+                                                {item.selectedSize && `Talla: ${item.selectedSize} | `}
+                                                Cant: {item.quantity}
                                             </p>
                                             <p className="font-mono text-sm mt-1">${item.price.toFixed(2)}</p>
                                         </div>
@@ -79,7 +79,7 @@ export const CartSidebar = () => {
                             disabled={items.length === 0}
                             className="w-full btn-brutal disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            <span>Initialize Checkout</span>
+                            <span>Iniciar Compra</span>
                             <ArrowRight className="h-4 w-4" />
                         </button>
                     </div>

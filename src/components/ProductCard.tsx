@@ -16,7 +16,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     const [selectedSize, setSelectedSize] = useState<string>('L');
     const [isHovered, setIsHovered] = useState(false);
 
-    const isApparel = product.category === 'Apparel';
+    const isApparel = product.category === 'Ropa';
 
     const handleAddToCart = (e: React.MouseEvent) => {
         e.preventDefault(); // Prevent navigation
@@ -44,7 +44,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                 {!product.inStock && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
                         <span className="border border-white bg-black px-4 py-2 font-mono text-white uppercase">
-                            Out of Stock
+                            Agotado
                         </span>
                     </div>
                 )}
@@ -100,7 +100,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                             !product.inStock && "opacity-50 cursor-not-allowed"
                         )}
                     >
-                        <span>Add to Cart</span>
+                        <span>Agregar al Carrito</span>
                         <Plus className="h-4 w-4" />
                     </button>
                 </div>

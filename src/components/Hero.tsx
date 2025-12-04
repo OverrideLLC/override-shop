@@ -14,20 +14,20 @@ export const Hero = () => {
                 {/* Left Content */}
                 <div className="flex flex-col justify-center border-b border-black p-8 lg:border-b-0 lg:border-r lg:p-16">
                     <div className="mb-6 inline-block w-fit border border-black px-3 py-1 font-mono text-xs font-bold uppercase tracking-widest">
-                        New Collection 2025
+                        Nueva Colección 2025
                     </div>
                     <h1 className="mb-6 text-6xl font-black uppercase leading-none tracking-tighter md:text-8xl">
                         System<br />Override
                     </h1>
                     <p className="mb-8 max-w-md font-mono text-lg text-gray-600">
-                        Minimalist apparel designed for the modern developer.
-                        Compile your wardrobe with our latest drop.
+                        Ropa minimalista diseñada para el desarrollador moderno.
+                        Compila tu guardarropa con nuestro último lanzamiento.
                     </p>
                     <button
                         onClick={scrollToProducts}
                         className="group flex w-fit items-center gap-3 border border-black bg-black px-8 py-4 text-white transition-all hover:bg-white hover:text-black"
                     >
-                        <span className="font-bold uppercase tracking-widest">Shop Collection</span>
+                        <span className="font-bold uppercase tracking-widest">Ver Colección</span>
                         <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                     </button>
                 </div>
@@ -40,7 +40,7 @@ export const Hero = () => {
                         className="h-full w-full object-cover grayscale transition-all duration-500 hover:grayscale-0"
                     />
                     <div className="absolute bottom-0 left-0 border-t border-r border-black bg-white px-4 py-2 font-mono text-xs font-bold">
-                        FEATURED: OVERRIDE_HOODIE_V1
+                        DESTACADO: OVERRIDE_HOODIE_V1
                     </div>
                 </div>
             </div>
