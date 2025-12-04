@@ -17,7 +17,7 @@ export const Header = () => {
                     onClick={() => setIsCartOpen(true)}
                     className="flex items-center gap-2 hover:underline decoration-1 underline-offset-4"
                 >
-                    <span className="font-mono text-sm">[CART: {itemCount}]</span>
+                    <span className="font-mono text-sm">[CARRITO: {itemCount}]</span>
                     <ShoppingCart className="h-5 w-5" />
                 </button>
             </div>

@@ -8,7 +8,7 @@ export const ProductList = () => {
     if (loading) {
         return (
             <div className="flex h-64 items-center justify-center">
-                <div className="animate-pulse font-mono text-xl">LOADING_ASSETS...</div>
+                <div className="animate-pulse font-mono text-xl">CARGANDO_RECURSOS...</div>
             </div>
         );
     }
@@ -22,7 +22,7 @@ export const ProductList = () => {
     }
 
     // Group by category for a structured layout
-    const categories: Category[] = ['Apparel', 'Accessories', 'Desk Mats'];
+    const categories: Category[] = ['Ropa', 'Accesorios', 'Mats'];
 
     return (
         <div className="space-y-16 py-12">

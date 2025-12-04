@@ -16,7 +16,7 @@ export const ProductDetails = () => {
     if (loading) {
         return (
             <div className="flex h-[50vh] items-center justify-center">
-                <div className="animate-pulse font-mono text-xl">LOADING_DATA...</div>
+                <div className="animate-pulse font-mono text-xl">CARGANDO_DATOS...</div>
             </div>
         );
     }
@@ -27,19 +27,19 @@ export const ProductDetails = () => {
                 <div className="font-mono text-red-600">ERROR: {error || 'Product not found'}</div>
                 <Link to="/" className="btn-brutal">
                     <ArrowLeft className="h-4 w-4" />
-                    Return to Base
+                    Volver a la Base
                 </Link>
             </div>
         );
     }
 
-    const isApparel = product.category === 'Apparel';
+    const isApparel = product.category === 'Ropa';
 
     return (
         <div className="py-12">
             <Link to="/" className="mb-8 inline-flex items-center gap-2 font-mono text-sm hover:underline">
                 <ArrowLeft className="h-4 w-4" />
-                BACK_TO_CATALOG
+                VOLVER_AL_CATALOGO
             </Link>
 
             <div className="grid gap-12 lg:grid-cols-2">
@@ -73,7 +73,7 @@ export const ProductDetails = () => {
                     <div className="mt-auto space-y-6">
                         {isApparel && (
                             <div className="space-y-2">
-                                <label className="font-mono text-sm font-bold uppercase">Select Size:</label>
+                                <label className="font-mono text-sm font-bold uppercase">Seleccionar Talla:</label>
                                 <div className="flex gap-3">
                                     {SIZES.map(size => (
                                         <button
@@ -102,13 +102,13 @@ export const ProductDetails = () => {
                                 !product.inStock && "opacity-50 cursor-not-allowed"
                             )}
                         >
-                            <span>Add to Cart</span>
+                            <span>Agregar al Carrito</span>
                             <Plus className="h-5 w-5" />
                         </button>
 
                         {!product.inStock && (
                             <p className="text-center font-mono text-sm text-red-600">
-                // OUT_OF_STOCK_EXCEPTION
+                // EXCEPCION_AGOTADO
                             </p>
                         )}
                     </div>
