@@ -24,7 +24,7 @@ export const CartSidebar = () => {
                 )}
             >
                 <div className="flex h-full flex-col">
-                    <div className="flex items-center justify-between border-b border-[#00ff00] p-4">
+                    <div className="flex items-center justify-between border-b border-[#00ff00] p-4 md:p-6">
                         <h2 className="font-bold text-lg text-[#00ff00]">SISTEMA_CARRITO</h2>
                         <button
                             onClick={() => setIsCartOpen(false)}

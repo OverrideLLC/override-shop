@@ -14,7 +14,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
             <Header />
             <CartSidebar />
             {isHomePage && <Hero />}
-            <main className="container mx-auto px-4 py-12">
+            <main className="container mx-auto px-4 py-8 md:py-12">
                 {children}
             </main>
             <Footer />

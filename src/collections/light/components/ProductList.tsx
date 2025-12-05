@@ -31,19 +31,19 @@ export const ProductList = () => {
         : allCategories;
 
     return (
-        <div className="space-y-20 py-12">
+        <div className="space-y-12 md:space-y-20 py-8 md:py-12">
             {categories.map(category => {
                 const categoryProducts = products.filter(p => p.category === category);
                 if (categoryProducts.length === 0) return null;
 
                 return (
-                    <section key={category} className="space-y-8">
-                        <div className="flex items-center gap-6">
-                            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">{category}</h2>
+                    <section key={category} className="space-y-6 md:space-y-8">
+                        <div className="flex items-center gap-4 md:gap-6">
+                            <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">{category}</h2>
                             <div className="h-px flex-1 bg-gray-200"></div>
                         </div>
 
-                        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        <div className="grid grid-cols-1 gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                             {categoryProducts.map(product => (
                                 <ProductCard key={product.id} product={product} />
                             ))}

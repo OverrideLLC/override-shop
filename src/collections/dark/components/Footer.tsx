@@ -3,7 +3,7 @@ import { Github, Twitter, Instagram } from 'lucide-react';
 export const Footer = () => {
     return (
         <footer className="border-t border-[#00ff00] bg-black text-[#00ff00]">
-            <div className="container mx-auto px-4 py-12">
+            <div className="container mx-auto px-4 py-8 md:py-12">
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
                     {/* Brand */}
                     <div className="flex flex-col gap-4">
@@ -39,7 +39,7 @@ export const Footer = () => {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="mt-12 flex items-center justify-between border-t border-[#00ff00] pt-8">
+                <div className="mt-8 md:mt-12 flex flex-col md:flex-row items-center justify-between border-t border-[#00ff00] pt-8 gap-4 md:gap-0">
                     <p className="font-mono text-xs text-[#00ff00]/50">
                         © 2024 Override Shop. All rights reserved.
                     </p>

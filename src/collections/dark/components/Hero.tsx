@@ -16,26 +16,26 @@ export const Hero = () => {
     if (!heroData) return null;
 
     return (
-        <section className="relative w-full border-b border-[#00ff00] bg-black overflow-hidden">
-            <div className="container mx-auto px-4 py-24 flex flex-col items-start relative z-10">
-                <div className="flex items-center gap-2 mb-6 text-[#00ff00]">
-                    <Terminal className="w-5 h-5" />
-                    <span className="font-mono text-sm">ROOT_ACCESS_GRANTED</span>
+        <section className="relative w-full h-auto min-h-[400px] md:h-[500px] border-b border-[#00ff00] bg-black overflow-hidden flex items-center">
+            <div className="container mx-auto px-4 py-12 md:py-24 flex flex-col items-start relative z-10">
+                <div className="flex items-center gap-2 mb-4 md:mb-6 text-[#00ff00]">
+                    <Terminal className="w-4 h-4 md:w-5 md:h-5" />
+                    <span className="font-mono text-xs md:text-sm">ROOT_ACCESS_GRANTED</span>
                 </div>
 
-                <h1 className="text-4xl md:text-6xl font-bold text-[#00ff00] mb-6 font-mono uppercase tracking-widest glitch-text">
+                <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold text-[#00ff00] mb-4 md:mb-6 font-mono uppercase tracking-widest glitch-text">
                     {heroData.title}
                 </h1>
 
-                <div className="p-4 border border-[#00ff00] bg-black/50 backdrop-blur-sm mb-8 max-w-2xl">
-                    <p className="text-lg md:text-xl text-[#00ff00] font-mono leading-relaxed">
+                <div className="p-4 border border-[#00ff00] bg-black/50 backdrop-blur-sm mb-6 md:mb-8 max-w-2xl">
+                    <p className="text-base md:text-lg lg:text-xl text-[#00ff00] font-mono leading-relaxed">
                         {heroData.subtitle}
                     </p>
                 </div>
 
                 <Link
                     to={heroData.ctaLink}
-                    className="group inline-flex items-center gap-3 px-8 py-4 bg-[#00ff00] text-black font-mono font-bold uppercase tracking-wider hover:bg-[#00ff00]/90 transition-all hover:translate-x-2"
+                    className="group inline-flex items-center gap-3 px-6 py-3 md:px-8 md:py-4 bg-[#00ff00] text-black font-mono font-bold uppercase tracking-wider hover:bg-[#00ff00]/90 transition-all hover:translate-x-2 text-sm md:text-base"
                 >
                     <span className="animate-pulse mr-2">{'>'}</span>
                     {heroData.ctaText}

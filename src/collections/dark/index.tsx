@@ -10,7 +10,7 @@ export const DarkCollection = () => {
         <Layout>
             <Routes>
                 <Route path="/" element={
-                    <div id="product-list" className="py-12">
+                    <div id="product-list" className="py-8 md:py-12">
                         <ProductList />
                     </div>
                 } />
