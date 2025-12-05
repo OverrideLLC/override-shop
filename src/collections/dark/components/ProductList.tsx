@@ -1,6 +1,6 @@
-import { useProducts } from '../hooks/useProducts';
+import { useProducts } from '../../../shared/hooks/useProducts';
 import { ProductCard } from './ProductCard';
-import type { Category } from '../data/products';
+import type { Category } from '../../../shared/data/products';
 
 export const ProductList = () => {
     const { products, loading, error } = useProducts();

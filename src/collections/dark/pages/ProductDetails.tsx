@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Plus } from 'lucide-react';
-import { useProduct } from '../hooks/useProduct';
-import { useCart } from '../context/CartContext';
+import { useProduct } from '../../../shared/hooks/useProduct';
+import { useCart } from '../../../shared/context/CartContext';
 import { useState } from 'react';
 import { clsx } from 'clsx';
 
@@ -25,10 +25,12 @@ export const ProductDetails = () => {
         return (
             <div className="flex h-[50vh] flex-col items-center justify-center gap-4">
                 <div className="font-mono text-red-600">ERROR: {error || 'Product not found'}</div>
-                <Link to="/" className="btn-brutal">
-                    <ArrowLeft className="h-4 w-4" />
-                    Volver a la Base
-                </Link>
+                <div className="mb-8">
+                    <Link to="/dark" className="inline-flex items-center gap-2 text-[#00ff00] hover:underline decoration-1 underline-offset-4 font-mono text-sm uppercase">
+                        <ArrowLeft className="h-4 w-4" />
+                        <span>Volver al catalogo</span>
+                    </Link>
+                </div>
             </div>
         );
     }
