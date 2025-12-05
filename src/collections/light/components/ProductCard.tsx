@@ -27,7 +27,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     return (
         <Link
             to={`/light/product/${product.id}`}
-            className="group relative flex flex-col h-full bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
+            className="group relative flex flex-col h-full bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-accent/30"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -53,7 +53,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             {/* Content */}
             <div className="flex flex-1 flex-col p-4">
                 <div className="mb-2 flex items-start justify-between gap-4">
-                    <h3 className="font-bold text-lg leading-tight text-gray-900 group-hover:text-black transition-colors">{product.name}</h3>
+                    <h3 className="font-bold text-lg leading-tight text-gray-900 group-hover:text-accent transition-colors">{product.name}</h3>
                     <span className="text-lg font-medium text-gray-900">${product.price}</span>
                 </div>
 
@@ -76,7 +76,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                                     className={clsx(
                                         "h-8 w-8 text-xs font-medium transition-all rounded-full flex items-center justify-center",
                                         selectedSize === size
-                                            ? "bg-black text-white shadow-md scale-110"
+                                            ? "bg-black text-white shadow-md scale-110 bg-accent"
                                             : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                                     )}
                                 >
@@ -90,7 +90,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                         onClick={handleAddToCart}
                         disabled={!product.inStock}
                         className={clsx(
-                            "w-full py-3 bg-black text-white font-medium rounded-xl hover:bg-gray-800 hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 transform active:scale-95",
+                            "w-full py-3 bg-black text-white font-medium rounded-xl hover:bg-accent hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 transform active:scale-95",
                             !product.inStock && "opacity-50 cursor-not-allowed"
                         )}
                     >

@@ -1,63 +1,51 @@
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useHero } from '../../../shared/hooks/useHero';
 
 export const Hero = () => {
-    const scrollToProducts = () => {
-        const productList = document.getElementById('product-list');
-        if (productList) {
-            productList.scrollIntoView({ behavior: 'smooth' });
-        }
-    };
+    const { heroData, loading } = useHero();
+
+    if (loading) {
+        return (
+            <div className="w-full h-[600px] bg-gray-100 animate-pulse flex items-center justify-center">
+                <span className="text-gray-400 font-medium">Loading content...</span>
+            </div>
+        );
+    }
+
+    if (!heroData) return null;
 
     return (
-        <div className="relative border-b border-black">
-            <div className="grid grid-cols-1 lg:grid-cols-2">
-                {/* Left Content */}
-                <div className="flex flex-col justify-center border-b border-black p-8 lg:border-b-0 lg:border-r lg:p-16">
-                    <div className="mb-6 inline-block w-fit border border-black px-3 py-1 font-mono text-xs font-bold uppercase tracking-widest">
-                        Nueva Colección 2025
-                    </div>
-                    <h1 className="mb-6 text-6xl font-black uppercase leading-none tracking-tighter md:text-8xl">
-                        System<br />Override
-                    </h1>
-                    <p className="mb-8 max-w-md font-mono text-lg text-gray-600">
-                        Ropa minimalista diseñada para el desarrollador moderno.
-                        Compila tu guardarropa con nuestro último lanzamiento.
-                    </p>
-                    <button
-                        onClick={scrollToProducts}
-                        className="group flex w-fit items-center gap-3 border border-black bg-black px-8 py-4 text-white transition-all hover:bg-white hover:text-black"
-                    >
-                        <span className="font-bold uppercase tracking-widest">Ver Colección</span>
-                        <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-                    </button>
-                </div>
-
-                {/* Right Image */}
-                <div className="relative aspect-square lg:aspect-auto lg:h-full">
-                    <img
-                        src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=1000"
-                        alt="Featured Product"
-                        className="h-full w-full object-cover grayscale transition-all duration-500 hover:grayscale-0"
-                    />
-                    <div className="absolute bottom-0 left-0 border-t border-r border-black bg-white px-4 py-2 font-mono text-xs font-bold">
-                        DESTACADO: OVERRIDE_HOODIE_V1
-                    </div>
-                </div>
+        <section className="relative w-full h-[600px] overflow-hidden bg-gray-900">
+            {/* Background Image */}
+            <div className="absolute inset-0">
+                <img
+                    src={heroData.imageUrl}
+                    alt={heroData.title}
+                    className="w-full h-full object-cover opacity-60"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent" />
             </div>
 
-            {/* Marquee Strip */}
-            <div className="overflow-hidden border-t border-black bg-black py-3 text-white">
-                <div className="flex animate-marquee whitespace-nowrap font-mono text-sm font-bold uppercase tracking-widest">
-                    <span className="mx-4">/// WEAR_THE_CODE</span>
-                    <span className="mx-4">/// GIT_PUSH_FORCE</span>
-                    <span className="mx-4">/// NO_BUGS_ONLY_FEATURES</span>
-                    <span className="mx-4">/// SUDO_MAKE_ME_A_SANDWICH</span>
-                    <span className="mx-4">/// WEAR_THE_CODE</span>
-                    <span className="mx-4">/// GIT_PUSH_FORCE</span>
-                    <span className="mx-4">/// NO_BUGS_ONLY_FEATURES</span>
-                    <span className="mx-4">/// SUDO_MAKE_ME_A_SANDWICH</span>
-                </div>
+            {/* Content */}
+            <div className="relative container mx-auto px-4 h-full flex flex-col justify-center max-w-4xl">
+                <span className="inline-block px-4 py-1 mb-6 text-xs font-bold tracking-widest text-white uppercase bg-accent rounded-full w-fit">
+                    New Arrival
+                </span>
+                <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight tracking-tight">
+                    {heroData.title}
+                </h1>
+                <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl leading-relaxed">
+                    {heroData.subtitle}
+                </p>
+                <Link
+                    to={heroData.ctaLink}
+                    className="group inline-flex items-center gap-3 px-8 py-4 bg-white text-black rounded-full font-bold hover:bg-accent hover:text-white transition-all duration-300 transform hover:scale-105"
+                >
+                    {heroData.ctaText}
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
             </div>
-        </div>
+        </section>
     );
 };

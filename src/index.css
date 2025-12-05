@@ -14,6 +14,24 @@
 
     html.light body {
         @apply bg-gray-50 text-gray-900 font-sans;
+        --color-accent: #8b5cf6;
+        /* Violet 500 */
+        --color-accent-light: #ddd6fe;
+        /* Violet 200 */
+        --color-accent-dark: #7c3aed;
+        /* Violet 600 */
+    }
+
+    html.light .text-accent {
+        color: var(--color-accent);
+    }
+
+    html.light .bg-accent {
+        background-color: var(--color-accent);
+    }
+
+    html.light .border-accent {
+        border-color: var(--color-accent);
     }
 
     html.light h1,

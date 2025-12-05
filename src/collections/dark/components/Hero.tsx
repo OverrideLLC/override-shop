@@ -1,63 +1,51 @@
-import { ArrowRight } from 'lucide-react';
+import { Terminal } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useHero } from '../../../shared/hooks/useHero';
 
 export const Hero = () => {
-    const scrollToProducts = () => {
-        const productList = document.getElementById('product-list');
-        if (productList) {
-            productList.scrollIntoView({ behavior: 'smooth' });
-        }
-    };
+    const { heroData, loading } = useHero();
+
+    if (loading) {
+        return (
+            <div className="w-full h-[500px] bg-black border-b border-[#00ff00] animate-pulse flex items-center justify-center">
+                <span className="text-[#00ff00] font-mono">LOADING_SYSTEM_RESOURCES...</span>
+            </div>
+        );
+    }
+
+    if (!heroData) return null;
 
     return (
-        <div className="relative border-b border-black">
-            <div className="grid grid-cols-1 lg:grid-cols-2">
-                {/* Left Content */}
-                <div className="flex flex-col justify-center border-b border-black p-8 lg:border-b-0 lg:border-r lg:p-16">
-                    <div className="mb-6 inline-block w-fit border border-black px-3 py-1 font-mono text-xs font-bold uppercase tracking-widest">
-                        Nueva Colección 2025
-                    </div>
-                    <h1 className="mb-6 text-6xl font-black uppercase leading-none tracking-tighter md:text-8xl">
-                        System<br />Override
-                    </h1>
-                    <p className="mb-8 max-w-md font-mono text-lg text-gray-600">
-                        Ropa minimalista diseñada para el desarrollador moderno.
-                        Compila tu guardarropa con nuestro último lanzamiento.
+        <section className="relative w-full border-b border-[#00ff00] bg-black overflow-hidden">
+            <div className="container mx-auto px-4 py-24 flex flex-col items-start relative z-10">
+                <div className="flex items-center gap-2 mb-6 text-[#00ff00]">
+                    <Terminal className="w-5 h-5" />
+                    <span className="font-mono text-sm">ROOT_ACCESS_GRANTED</span>
+                </div>
+
+                <h1 className="text-4xl md:text-6xl font-bold text-[#00ff00] mb-6 font-mono uppercase tracking-widest glitch-text">
+                    {heroData.title}
+                </h1>
+
+                <div className="p-4 border border-[#00ff00] bg-black/50 backdrop-blur-sm mb-8 max-w-2xl">
+                    <p className="text-lg md:text-xl text-[#00ff00] font-mono leading-relaxed">
+                        {heroData.subtitle}
                     </p>
-                    <button
-                        onClick={scrollToProducts}
-                        className="group flex w-fit items-center gap-3 border border-black bg-black px-8 py-4 text-white transition-all hover:bg-white hover:text-black"
-                    >
-                        <span className="font-bold uppercase tracking-widest">Ver Colección</span>
-                        <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-                    </button>
                 </div>
 
-                {/* Right Image */}
-                <div className="relative aspect-square lg:aspect-auto lg:h-full">
-                    <img
-                        src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=1000"
-                        alt="Featured Product"
-                        className="h-full w-full object-cover grayscale transition-all duration-500 hover:grayscale-0"
-                    />
-                    <div className="absolute bottom-0 left-0 border-t border-r border-black bg-white px-4 py-2 font-mono text-xs font-bold">
-                        DESTACADO: OVERRIDE_HOODIE_V1
-                    </div>
-                </div>
+                <Link
+                    to={heroData.ctaLink}
+                    className="group inline-flex items-center gap-3 px-8 py-4 bg-[#00ff00] text-black font-mono font-bold uppercase tracking-wider hover:bg-[#00ff00]/90 transition-all hover:translate-x-2"
+                >
+                    <span className="animate-pulse mr-2">{'>'}</span>
+                    {heroData.ctaText}
+                </Link>
             </div>
 
-            {/* Marquee Strip */}
-            <div className="overflow-hidden border-t border-black bg-black py-3 text-white">
-                <div className="flex animate-marquee whitespace-nowrap font-mono text-sm font-bold uppercase tracking-widest">
-                    <span className="mx-4">/// WEAR_THE_CODE</span>
-                    <span className="mx-4">/// GIT_PUSH_FORCE</span>
-                    <span className="mx-4">/// NO_BUGS_ONLY_FEATURES</span>
-                    <span className="mx-4">/// SUDO_MAKE_ME_A_SANDWICH</span>
-                    <span className="mx-4">/// WEAR_THE_CODE</span>
-                    <span className="mx-4">/// GIT_PUSH_FORCE</span>
-                    <span className="mx-4">/// NO_BUGS_ONLY_FEATURES</span>
-                    <span className="mx-4">/// SUDO_MAKE_ME_A_SANDWICH</span>
-                </div>
+            {/* Matrix-like background effect (simplified) */}
+            <div className="absolute inset-0 opacity-20 pointer-events-none">
+                <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(0deg,transparent_24%,rgba(0,255,0,.3)_25%,rgba(0,255,0,.3)_26%,transparent_27%,transparent_74%,rgba(0,255,0,.3)_75%,rgba(0,255,0,.3)_76%,transparent_77%,transparent),linear-gradient(90deg,transparent_24%,rgba(0,255,0,.3)_25%,rgba(0,255,0,.3)_26%,transparent_27%,transparent_74%,rgba(0,255,0,.3)_75%,rgba(0,255,0,.3)_76%,transparent_77%,transparent)] bg-[length:50px_50px]" />
             </div>
-        </div>
+        </section>
     );
 };
