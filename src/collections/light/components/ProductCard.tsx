@@ -27,7 +27,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     return (
         <Link
             to={`/light/product/${product.id}`}
-            className="group relative flex flex-col h-full bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-accent/30"
+            className="group relative flex flex-col h-full bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-accent/30"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -37,27 +37,27 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                     src={product.image}
                     alt={product.name}
                     className={clsx(
-                        "h-full w-full object-cover transition-all duration-500",
-                        isHovered ? "scale-105 grayscale-0" : "grayscale"
+                        "h-full w-full object-cover transition-all duration-700",
+                        isHovered ? "scale-110 grayscale-0" : "grayscale-0"
                     )}
                 />
                 {!product.inStock && (
                     <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm">
                         <span className="px-4 py-2 text-xs font-bold uppercase tracking-wider bg-gray-100 text-gray-500 rounded-full">
-                            Out of Stock
+                            Agotado
                         </span>
                     </div>
                 )}
             </div>
 
             {/* Content */}
-            <div className="flex flex-1 flex-col p-4">
+            <div className="flex flex-1 flex-col p-5">
                 <div className="mb-2 flex items-start justify-between gap-4">
-                    <h3 className="font-bold text-lg leading-tight text-gray-900 group-hover:text-accent transition-colors">{product.name}</h3>
-                    <span className="text-lg font-medium text-gray-900">${product.price}</span>
+                    <h3 className="font-bold text-lg leading-tight text-slate-900 group-hover:text-accent transition-colors">{product.name}</h3>
+                    <span className="text-lg font-bold text-slate-900">${product.price}</span>
                 </div>
 
-                <p className="mb-6 text-sm text-gray-500 leading-relaxed flex-1">
+                <p className="mb-6 text-sm text-slate-500 leading-relaxed flex-1 line-clamp-2">
                     {product.description}
                 </p>
 
@@ -76,8 +76,8 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                                     className={clsx(
                                         "h-8 w-8 text-xs font-medium transition-all rounded-full flex items-center justify-center",
                                         selectedSize === size
-                                            ? "bg-black text-white shadow-md scale-110 bg-accent"
-                                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                            ? "bg-accent text-white shadow-md scale-110"
+                                            : "bg-gray-100 text-slate-600 hover:bg-gray-200"
                                     )}
                                 >
                                     {size}
@@ -90,11 +90,11 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                         onClick={handleAddToCart}
                         disabled={!product.inStock}
                         className={clsx(
-                            "w-full py-3 bg-black text-white font-medium rounded-xl hover:bg-accent hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 transform active:scale-95",
+                            "w-full py-3 bg-slate-900 text-white font-medium rounded-xl hover:bg-accent hover:shadow-lg hover:shadow-accent/20 transition-all duration-300 flex items-center justify-center gap-2 transform active:scale-95",
                             !product.inStock && "opacity-50 cursor-not-allowed"
                         )}
                     >
-                        <span>Add to Cart</span>
+                        <span>Agregar al Carrito</span>
                         <Plus className="h-4 w-4" />
                     </button>
                 </div>

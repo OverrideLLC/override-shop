@@ -1,7 +1,7 @@
 import { v2 as cloudinary } from 'cloudinary';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc, getDocs, deleteDoc } from 'firebase/firestore';
-import { PRODUCTS } from '../src/data/products';
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, setDoc } from 'firebase/firestore';
+import { PRODUCTS } from '../src/shared/data/products';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -29,60 +29,106 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Polyfill for fetch if needed (Node 18+ has fetch built-in)
-// if (!global.fetch) { ... }
+const HERO_LIGHT = {
+    title: "Summer Collection 2025",
+    subtitle: "Discover the new wave of minimalist fashion. Designed for the modern creator.",
+    ctaText: "Ver Productos",
+    ctaLink: "/light/products",
+    imageUrl: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop"
+};
+
+const HERO_DARK = {
+    title: "SYSTEM_OVERRIDE_INIT",
+    subtitle: "> ACCESSING_SECURE_VAULT... [SUCCESS] > DEPLOYING_TACTICAL_GEAR...",
+    ctaText: "EXECUTE_ORDER_66",
+    ctaLink: "/dark/products",
+    imageUrl: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop"
+};
+
+async function clearCollection(collectionName: string) {
+    console.log(`🧹 Clearing ${collectionName}...`);
+    const snapshot = await getDocs(collection(db, collectionName));
+    const deletePromises = snapshot.docs.map(doc => deleteDoc(doc.ref));
+    await Promise.all(deletePromises);
+    console.log(`   Deleted ${deletePromises.length} documents from ${collectionName}.`);
+}
+
+async function uploadImage(url: string, publicId: string) {
+    try {
+        const uploadResult = await cloudinary.uploader.upload(url, {
+            folder: 'override-shop',
+            public_id: publicId,
+            overwrite: true
+        });
+        return uploadResult.secure_url;
+    } catch (error) {
+        console.error(`   ❌ Image upload failed for ${publicId}, using original URL.`, error);
+        return url;
+    }
+}
 
 async function seed() {
     console.log('🚀 Starting seed process...');
 
     try {
-        // 1. Clear existing products (Optional, be careful!)
-        console.log('🧹 Clearing existing products...');
-        const snapshot = await getDocs(collection(db, 'products'));
-        const deletePromises = snapshot.docs.map(doc => deleteDoc(doc.ref));
-        await Promise.all(deletePromises);
-        console.log(`Deleted ${deletePromises.length} existing products.`);
+        // Clear all collections
+        await clearCollection('products');
+        await clearCollection('products_dark');
+        await clearCollection('hero');
+        await clearCollection('hero_dark');
 
-        // 2. Process each product
+        // Seed Products (Light)
+        console.log('\n📦 Seeding Light Products...');
         for (const product of PRODUCTS) {
-            console.log(`📦 Processing: ${product.name}`);
+            console.log(`   Processing: ${product.name}`);
+            const imageUrl = await uploadImage(product.image, `product_${product.id}`);
 
-            // Upload image to Cloudinary
-            let imageUrl = product.image;
-            try {
-                console.log(`   ⬆️ Uploading image to Cloudinary...`);
-                const uploadResult = await cloudinary.uploader.upload(product.image, {
-                    folder: 'override-shop',
-                    public_id: product.id,
-                    overwrite: true
-                });
-                imageUrl = uploadResult.secure_url;
-                console.log(`   ✅ Image uploaded: ${imageUrl}`);
-            } catch (imgError) {
-                console.error(`   ❌ Image upload failed for ${product.name}, using original URL.`, imgError);
-            }
-
-            // Save to Firestore
             const productData = {
                 ...product,
                 image: imageUrl,
                 createdAt: new Date().toISOString()
             };
 
-            // Remove the 'id' field from the data as Firestore generates its own, 
-            // OR use setDoc with the ID if we want to keep them. 
-            // Here we'll let Firestore generate IDs or just store the ID field inside.
-            // Actually, let's keep the ID field inside for reference, but Firestore ID will be different unless we use setDoc.
-            // For simplicity, we'll just addDoc.
-
+            // Use setDoc to keep IDs consistent if needed, or addDoc
             await addDoc(collection(db, 'products'), productData);
-            console.log(`   ✅ Saved to Firestore`);
         }
 
-        console.log('✨ Seed completed successfully!');
+        // Seed Products (Dark)
+        console.log('\n📦 Seeding Dark Products...');
+        for (const product of PRODUCTS) {
+            console.log(`   Processing: [DARK] ${product.name}`);
+            // Reuse image but maybe different public_id if we wanted different images, 
+            // but here we just reuse the URL logic (it will re-upload or we could optimize, but re-upload ensures it exists)
+            // Optimization: We already uploaded it for light. But to be safe/simple, we'll just re-upload or use the same URL if we stored it.
+            // For simplicity, let's just re-upload/check.
+            const imageUrl = await uploadImage(product.image, `product_${product.id}`);
+
+            const darkProductData = {
+                ...product,
+                name: `[DARK] ${product.name}`,
+                description: `[TERMINAL_MODE] ${product.description}`,
+                price: Number((product.price * 1.2).toFixed(2)),
+                image: imageUrl,
+                createdAt: new Date().toISOString()
+            };
+
+            await addDoc(collection(db, 'products_dark'), darkProductData);
+        }
+
+        // Seed Hero (Light)
+        console.log('\n🦸 Seeding Light Hero...');
+        const heroLightImage = await uploadImage(HERO_LIGHT.imageUrl, 'hero_light');
+        await addDoc(collection(db, 'hero'), { ...HERO_LIGHT, imageUrl: heroLightImage });
+
+        // Seed Hero (Dark)
+        console.log('\n🦹 Seeding Dark Hero...');
+        const heroDarkImage = await uploadImage(HERO_DARK.imageUrl, 'hero_dark');
+        await addDoc(collection(db, 'hero_dark'), { ...HERO_DARK, imageUrl: heroDarkImage });
+
+        console.log('\n✨ Seed completed successfully!');
         process.exit(0);
     } catch (error) {
-        console.error('❌ Seed failed:', error);
+        console.error('\n❌ Seed failed:', error);
         process.exit(1);
     }
 }

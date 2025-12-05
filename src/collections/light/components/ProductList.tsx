@@ -1,43 +1,49 @@
+import { useSearchParams } from 'react-router-dom';
 import { useProducts } from '../../../shared/hooks/useProducts';
 import { ProductCard } from './ProductCard';
 import type { Category } from '../../../shared/data/products';
 
 export const ProductList = () => {
     const { products, loading, error } = useProducts();
+    const [searchParams] = useSearchParams();
+    const selectedCategory = searchParams.get('category');
 
     if (loading) {
         return (
             <div className="flex h-64 items-center justify-center">
-                <div className="animate-pulse font-mono text-xl">CARGANDO_RECURSOS...</div>
+                <div className="animate-pulse text-xl font-medium text-slate-400">Cargando productos...</div>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="flex h-64 items-center justify-center text-red-600 font-mono">
-                ERROR: {error}
+            <div className="flex h-64 items-center justify-center text-red-500 font-medium">
+                Error: {error}
             </div>
         );
     }
 
     // Group by category for a structured layout
-    const categories: Category[] = ['Ropa', 'Accesorios', 'Mats'];
+    const allCategories: Category[] = ['Ropa', 'Accesorios', 'Mats'];
+    const categories = selectedCategory
+        ? allCategories.filter(c => c === selectedCategory)
+        : allCategories;
 
     return (
-        <div className="space-y-16 py-12">
+        <div className="space-y-20 py-12">
             {categories.map(category => {
                 const categoryProducts = products.filter(p => p.category === category);
                 if (categoryProducts.length === 0) return null;
 
                 return (
-                    <section key={category} className="space-y-6">
-                        <div className="flex items-center gap-4">
-                            <h2 className="text-2xl font-bold uppercase tracking-widest">{category}</h2>
-                            <div className="h-px flex-1 bg-black"></div>
+                    <section key={category} className="space-y-8">
+                        <div className="flex items-center gap-6">
+                            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">{category}</h2>
+                            <div className="h-px flex-1 bg-gray-200"></div>
                         </div>
 
-                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                             {categoryProducts.map(product => (
                                 <ProductCard key={product.id} product={product} />
                             ))}

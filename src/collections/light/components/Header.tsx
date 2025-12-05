@@ -31,7 +31,7 @@ export const Header = () => {
                 {/* Center Logo */}
                 <div className="flex items-center justify-center gap-2 w-1/3">
                     <Link to="/" className="flex items-center gap-2 group">
-                        <img src="https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/logos/Overridelogo.svg" alt="Override Logo" className="h-8 w-8 group-hover:scale-110 transition-transform duration-300" />
+                        <img src="https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/logos/Overridelogo.svg" alt="Override Logo" className="h-8 w-8 group-hover:scale-110 transition-transform duration-300 brightness-0 invert sepia saturate-[5000%] hue-rotate-[260deg]" />
                         <span className="text-xl font-bold tracking-tight text-gray-900 group-hover:text-accent transition-colors">Override Shop</span>
                     </Link>
                 </div>

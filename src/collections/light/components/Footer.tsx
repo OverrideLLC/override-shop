@@ -8,7 +8,7 @@ export const Footer = () => {
                     {/* Brand */}
                     <div className="flex flex-col gap-4">
                         <div className="flex items-center gap-2">
-                            <img src="https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/logos/Overridelogo.svg" alt="Override Logo" className="h-8 w-8" />
+                            <img src="https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/logos/Overridelogo.svg" alt="Override Logo" className="h-8 w-8 brightness-0 invert sepia saturate-[5000%] hue-rotate-[260deg]" />
                             <span className="font-bold tracking-tight text-gray-900">@Override</span>
                         </div>
                     </div>

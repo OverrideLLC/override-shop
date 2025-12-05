@@ -3,6 +3,8 @@ import { Layout } from './components/Layout';
 import { ProductList } from './components/ProductList';
 import { ProductDetails } from './pages/ProductDetails';
 
+import { Products } from './pages/Products';
+
 export const DarkCollection = () => {
     return (
         <Layout>
@@ -12,6 +14,7 @@ export const DarkCollection = () => {
                         <ProductList />
                     </div>
                 } />
+                <Route path="/products" element={<Products />} />
                 <Route path="/product/:id" element={<ProductDetails />} />
             </Routes>
         </Layout>
