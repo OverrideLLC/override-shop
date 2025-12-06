@@ -62,12 +62,12 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
             {/* Content */}
             <div className="flex flex-1 flex-col p-4">
-                <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-bold text-lg leading-tight">{product.name}</h3>
-                    <span className="font-mono text-lg">${product.price}</span>
+                <div className="flex justify-between items-start mb-2 gap-2">
+                    <h3 className="font-bold text-lg leading-tight break-words min-w-0">{product.name}</h3>
+                    <span className="font-mono text-lg whitespace-nowrap">${product.price}</span>
                 </div>
 
-                <p className="mb-4 text-sm text-[#00ff00]/80 font-mono flex-1">
+                <p className="mb-4 text-sm text-[#00ff00]/80 font-mono flex-1 line-clamp-3 break-words">
                     {product.description}
                 </p>
 
