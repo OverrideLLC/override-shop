@@ -41,7 +41,7 @@ export const Footer = () => {
                 {/* Bottom Bar */}
                 <div className="mt-8 md:mt-12 flex flex-col md:flex-row items-center justify-between border-t border-[#00ff00] pt-8 gap-4 md:gap-0">
                     <p className="font-mono text-xs text-[#00ff00]/50">
-                        © 2024 Override Shop. All rights reserved.
+                        © 2024 Override Shop. Todos los derechos reservados.
                     </p>
                     <div className="flex gap-4">
                         <a href="https://github.com/OverrideLLC" target="_blank" rel="noopener noreferrer"><Github className="h-5 w-5 text-[#00ff00]/50 hover:text-[#00ff00] cursor-pointer" /></a>

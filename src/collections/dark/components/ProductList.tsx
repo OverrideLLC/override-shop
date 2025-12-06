@@ -1,9 +1,13 @@
 import { useProducts } from '../../../shared/hooks/useProducts';
+import { useCategories } from '../../../shared/hooks/useCategories';
 import { ProductCard } from './ProductCard';
-import type { Category } from '../../../shared/data/products';
 
 export const ProductList = () => {
-    const { products, loading, error } = useProducts();
+    const { products, loading: productsLoading, error: productsError } = useProducts();
+    const { categories, loading: categoriesLoading } = useCategories();
+
+    const loading = productsLoading || categoriesLoading;
+    const error = productsError;
 
     if (loading) {
         return (
@@ -22,7 +26,6 @@ export const ProductList = () => {
     }
 
     // Group by category for a structured layout
-    const categories: Category[] = ['Ropa', 'Accesorios', 'Mats'];
 
     return (
         <div className="space-y-12 md:space-y-16 py-8 md:py-12">

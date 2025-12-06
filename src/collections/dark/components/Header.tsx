@@ -33,16 +33,18 @@ export const Header = () => {
                 <div className="hidden md:flex items-center gap-4 w-1/3">
                     <button
                         onClick={handleThemeToggle}
-                        className="font-mono text-sm uppercase hover:underline decoration-1 underline-offset-4 text-[#00ff00]"
+                        className="font-mono text-sm uppercase hover:underline decoration-1 underline-offset-4 text-[#00ff00]/50 hover:text-[#00ff00]"
                     >
-                        [CAMBIAR_A_LIGHT]
+                        [COLECCIÓN_LIGHT]
                     </button>
+                    <span className="font-mono text-sm uppercase text-[#00ff00] font-bold border border-[#00ff00] px-2 py-1">
+                        [COLECCIÓN_DARK]
+                    </span>
                 </div>
 
                 {/* Center Logo */}
                 <div className="flex items-center justify-center gap-2 w-full md:w-1/3">
                     <Link to="/" className="flex items-center gap-2">
-                        <img src="https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/logos/Overridelogo.svg" alt="Override Logo" className="h-8 w-8 brightness-0 invert sepia saturate-[5000%] hue-rotate-[80deg]" />
                         <span className="text-xl font-bold tracking-tighter text-[#00ff00]">@Override fun Shop()</span>
                     </Link>
                 </div>
@@ -64,12 +66,17 @@ export const Header = () => {
             {isMobileMenuOpen && (
                 <div className="md:hidden border-t border-[#00ff00] bg-black px-4 py-4 shadow-lg absolute w-full left-0 z-50">
                     <div className="flex flex-col gap-4">
-                        <button
-                            onClick={handleThemeToggle}
-                            className="w-full border border-[#00ff00] px-4 py-3 text-sm font-mono uppercase tracking-wide text-[#00ff00] hover:bg-[#00ff00]/10 transition-colors text-center"
-                        >
-                            [CAMBIAR_A_LIGHT]
-                        </button>
+                        <div className="flex flex-col gap-2">
+                            <button
+                                onClick={handleThemeToggle}
+                                className="w-full border border-[#00ff00]/30 px-4 py-3 text-sm font-mono uppercase tracking-wide text-[#00ff00]/70 hover:bg-[#00ff00]/10 transition-colors text-center"
+                            >
+                                [COLECCIÓN_LIGHT]
+                            </button>
+                            <div className="w-full border border-[#00ff00] bg-[#00ff00]/10 px-4 py-3 text-sm font-mono uppercase tracking-wide text-[#00ff00] font-bold text-center">
+                                [COLECCIÓN_DARK]
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}

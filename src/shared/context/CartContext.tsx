@@ -49,7 +49,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const checkoutWhatsApp = () => {
         const phoneNumber = "524522007824"; // Replace with actual number
         const message = items.map(item =>
-            `${item.quantity}x ${item.name} ${item.selectedSize ? `(Size: ${item.selectedSize})` : ''} - $${item.price}`
+            `${item.quantity}x ${item.name} ${item.selectedSize ? `(Talla: ${item.selectedSize})` : ''} - $${item.price}`
         ).join('%0A');
 
         const totalMsg = `%0ATotal: $${total.toFixed(2)}`;

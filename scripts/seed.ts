@@ -76,16 +76,36 @@ async function seed() {
         await clearCollection('products_dark');
         await clearCollection('hero');
         await clearCollection('hero_dark');
+        await clearCollection('categories');
+
+        // Extract and Seed Categories
+        console.log('\n📂 Seeding Categories...');
+        const categories = Array.from(new Set(PRODUCTS.map(p => p.category)));
+        for (const category of categories) {
+            console.log(`   Processing Category: ${category}`);
+            await addDoc(collection(db, 'categories'), {
+                name: category,
+                createdAt: new Date().toISOString()
+            });
+        }
 
         // Seed Products (Light)
         console.log('\n📦 Seeding Light Products...');
         for (const product of PRODUCTS) {
             console.log(`   Processing: ${product.name}`);
-            const imageUrl = await uploadImage(product.image, `product_${product.id}`);
+
+            // Upload all images
+            const imageUrls = [];
+            for (let i = 0; i < product.images.length; i++) {
+                const url = await uploadImage(product.images[i], `product_${product.id}_${i}`);
+                imageUrls.push(url);
+            }
 
             const productData = {
                 ...product,
-                image: imageUrl,
+                images: imageUrls,
+                // Keep legacy image field for backward compatibility if needed, using first image
+                image: imageUrls[0],
                 createdAt: new Date().toISOString()
             };
 
@@ -97,18 +117,24 @@ async function seed() {
         console.log('\n📦 Seeding Dark Products...');
         for (const product of PRODUCTS) {
             console.log(`   Processing: [DARK] ${product.name}`);
-            // Reuse image but maybe different public_id if we wanted different images, 
-            // but here we just reuse the URL logic (it will re-upload or we could optimize, but re-upload ensures it exists)
-            // Optimization: We already uploaded it for light. But to be safe/simple, we'll just re-upload or use the same URL if we stored it.
-            // For simplicity, let's just re-upload/check.
-            const imageUrl = await uploadImage(product.image, `product_${product.id}`);
+
+            // Re-upload images for dark mode (or reuse logic if we want separate storage)
+            // For now, we reuse the same source URLs but upload them again to ensure they exist/are tracked
+            // In a real app, we might just reference the same Cloudinary URLs if we stored them from the previous loop
+            // But to keep loops independent for now:
+            const imageUrls = [];
+            for (let i = 0; i < product.images.length; i++) {
+                const url = await uploadImage(product.images[i], `product_${product.id}_${i}`);
+                imageUrls.push(url);
+            }
 
             const darkProductData = {
                 ...product,
                 name: `[DARK] ${product.name}`,
                 description: `[TERMINAL_MODE] ${product.description}`,
                 price: Number((product.price * 1.2).toFixed(2)),
-                image: imageUrl,
+                images: imageUrls,
+                image: imageUrls[0],
                 createdAt: new Date().toISOString()
             };
 

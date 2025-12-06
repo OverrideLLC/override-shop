@@ -31,18 +31,20 @@ export const Header = () => {
 
                 {/* Left Actions (Desktop) */}
                 <div className="hidden md:flex items-center gap-4 w-1/3">
+                    <span className="text-sm font-bold text-gray-900 bg-gray-100 px-3 py-1 rounded-full">
+                        Colección Light
+                    </span>
                     <button
                         onClick={handleThemeToggle}
-                        className="rounded-full bg-gray-100 px-4 py-2 text-xs font-medium uppercase tracking-wide text-gray-600 hover:bg-gray-200 transition-colors"
+                        className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
                     >
-                        Switch to Dark
+                        Colección Dark
                     </button>
                 </div>
 
                 {/* Center Logo */}
                 <div className="flex items-center justify-center gap-2 w-full md:w-1/3">
                     <Link to="/" className="flex items-center gap-2 group">
-                        <img src="https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/logos/Overridelogo.svg" alt="Override Logo" className="h-8 w-8 group-hover:scale-110 transition-transform duration-300 brightness-0 invert sepia saturate-[5000%] hue-rotate-[260deg]" />
                         <span className="text-xl font-bold tracking-tight text-gray-900 group-hover:text-accent transition-colors">Override Shop</span>
                     </Link>
                 </div>
@@ -53,7 +55,7 @@ export const Header = () => {
                         onClick={() => setIsCartOpen(true)}
                         className="flex items-center gap-2 rounded-full bg-black px-3 py-2 md:px-4 md:py-2 text-white hover:bg-accent transition-colors shadow-md hover:shadow-lg"
                     >
-                        <span className="hidden md:inline text-sm font-medium">Cart ({itemCount})</span>
+                        <span className="hidden md:inline text-sm font-medium">Carrito ({itemCount})</span>
                         <span className="md:hidden text-sm font-medium">({itemCount})</span>
                         <ShoppingCart className="h-4 w-4" />
                     </button>
@@ -64,12 +66,17 @@ export const Header = () => {
             {isMobileMenuOpen && (
                 <div className="md:hidden border-t border-gray-100 bg-white px-4 py-4 shadow-lg absolute w-full left-0">
                     <div className="flex flex-col gap-4">
-                        <button
-                            onClick={handleThemeToggle}
-                            className="w-full rounded-lg bg-gray-100 px-4 py-3 text-sm font-medium uppercase tracking-wide text-gray-600 hover:bg-gray-200 transition-colors text-center"
-                        >
-                            Switch to Dark Mode
-                        </button>
+                        <div className="flex flex-col gap-2">
+                            <div className="w-full bg-gray-100 px-4 py-3 text-sm font-bold text-gray-900 rounded-lg text-center">
+                                Colección Light
+                            </div>
+                            <button
+                                onClick={handleThemeToggle}
+                                className="w-full px-4 py-3 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-lg transition-colors text-center"
+                            >
+                                Colección Dark
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

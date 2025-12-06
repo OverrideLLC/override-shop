@@ -5,6 +5,8 @@ import { DarkCollection } from './collections/dark';
 import { LightCollection } from './collections/light';
 import { useEffect } from 'react';
 
+import { AnnouncementBar } from './shared/components/AnnouncementBar';
+
 const ThemeRouteHandler = ({ children, mode }: { children: React.ReactNode, mode: 'light' | 'dark' }) => {
   const { setTheme } = useTheme();
 
@@ -19,6 +21,7 @@ function App() {
   return (
     <CartProvider>
       <ThemeProvider>
+        <AnnouncementBar />
         <Routes>
           <Route path="/" element={<Navigate to="/light" replace />} />
 

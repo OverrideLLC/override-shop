@@ -45,7 +45,7 @@ export const CartSidebar = () => {
                                 {items.map((item) => (
                                     <div key={`${item.id}-${item.selectedSize}`} className="flex gap-4 border border-[#00ff00] p-3 rounded-none">
                                         <img
-                                            src={item.image}
+                                            src={item.images[0]}
                                             alt={item.name}
                                             className="h-20 w-20 object-cover rounded-none border border-[#00ff00]"
                                         />

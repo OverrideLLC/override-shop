@@ -25,7 +25,7 @@ export const CartSidebar = () => {
             >
                 <div className="flex h-full flex-col">
                     <div className="flex items-center justify-between border-b border-gray-100 p-4 md:p-6">
-                        <h2 className="font-bold text-xl text-gray-900">Shopping Cart</h2>
+                        <h2 className="font-bold text-xl text-gray-900">Carrito de Compras</h2>
                         <button
                             onClick={() => setIsCartOpen(false)}
                             className="p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-500 hover:text-black"
@@ -45,7 +45,7 @@ export const CartSidebar = () => {
                                 {items.map((item) => (
                                     <div key={`${item.id}-${item.selectedSize}`} className="flex gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-100">
                                         <img
-                                            src={item.image}
+                                            src={item.images[0]}
                                             alt={item.name}
                                             className="h-20 w-20 object-cover rounded-xl border border-gray-100"
                                         />
@@ -79,7 +79,7 @@ export const CartSidebar = () => {
                             disabled={items.length === 0}
                             className="w-full py-4 bg-black text-white font-bold rounded-xl hover:bg-gray-800 hover:shadow-lg transition-all flex items-center justify-center gap-2"
                         >
-                            <span>Checkout with WhatsApp</span>
+                            <span>Comprar por WhatsApp</span>
                             <MessageCircle className="h-5 w-5" />
                         </button>
                     </div>

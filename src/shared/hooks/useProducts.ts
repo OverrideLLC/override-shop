@@ -14,20 +14,33 @@ export const useProducts = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             setLoading(true);
-            try {
-                // Determine collection name based on theme
-                // 'products' for light (default), 'products_dark' for dark
-                // Or 'products_light' and 'products_dark' if we want strict separation
-                // For now, let's assume 'products' is the default (light) and we add 'products_dark'
-                const collectionName = theme === 'dark' ? 'products_dark' : 'products';
+            const collectionName = theme === 'dark' ? 'products_dark' : 'products';
+            const cacheKey = `products_${collectionName}`;
 
+            // Check cache
+            const cachedData = sessionStorage.getItem(cacheKey);
+            if (cachedData) {
+                console.log(`Using cached data for ${collectionName}`);
+                setProducts(JSON.parse(cachedData));
+                setLoading(false);
+                return;
+            }
+
+            try {
                 const querySnapshot = await getDocs(collection(db, collectionName));
                 if (!querySnapshot.empty) {
-                    const firebaseProducts = querySnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => ({
-                        id: doc.id,
-                        ...doc.data()
-                    })) as Product[];
+                    const firebaseProducts = querySnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => {
+                        const data = doc.data();
+                        return {
+                            id: doc.id,
+                            ...data,
+                            // Ensure images array exists, fallback to legacy image field if needed
+                            images: data.images || (data.image ? [data.image] : [])
+                        };
+                    }) as Product[];
+
                     setProducts(firebaseProducts);
+                    sessionStorage.setItem(cacheKey, JSON.stringify(firebaseProducts));
                     setLoading(false);
                     return;
                 }
@@ -36,33 +49,37 @@ export const useProducts = () => {
                 console.log(`Using mock data for ${theme} mode`);
                 // Simulate network delay
                 setTimeout(() => {
+                    let mockData: Product[];
                     if (theme === 'dark') {
                         // Create "Dark" versions of products for mock
-                        const darkProducts = MOCK_PRODUCTS.map(p => ({
+                        mockData = MOCK_PRODUCTS.map(p => ({
                             ...p,
                             name: `[DARK] ${p.name}`,
                             description: `[TERMINAL_MODE] ${p.description}`,
                             price: p.price * 1.2 // Slightly different price to be noticeable
                         }));
-                        setProducts(darkProducts);
                     } else {
-                        setProducts(MOCK_PRODUCTS);
+                        mockData = MOCK_PRODUCTS;
                     }
+                    setProducts(mockData);
+                    sessionStorage.setItem(cacheKey, JSON.stringify(mockData));
                     setLoading(false);
                 }, 800);
 
             } catch (err) {
                 console.warn('Firebase connection failed or not configured, using mock data.', err);
+                let mockData: Product[];
                 if (theme === 'dark') {
-                    const darkProducts = MOCK_PRODUCTS.map(p => ({
+                    mockData = MOCK_PRODUCTS.map(p => ({
                         ...p,
                         name: `[DARK] ${p.name}`,
                         description: `[TERMINAL_MODE] ${p.description}`
                     }));
-                    setProducts(darkProducts);
                 } else {
-                    setProducts(MOCK_PRODUCTS);
+                    mockData = MOCK_PRODUCTS;
                 }
+                setProducts(mockData);
+                sessionStorage.setItem(cacheKey, JSON.stringify(mockData));
                 setLoading(false);
             }
         };

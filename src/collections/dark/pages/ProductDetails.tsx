@@ -12,6 +12,12 @@ export const ProductDetails = () => {
     const { product, loading, error } = useProduct(id);
     const { addItem } = useCart();
     const [selectedSize, setSelectedSize] = useState<string>('L');
+    const [selectedImage, setSelectedImage] = useState<string>('');
+
+    // Initialize selectedImage when product loads
+    if (product && !selectedImage && product.images.length > 0) {
+        setSelectedImage(product.images[0]);
+    }
 
     if (loading) {
         return (
@@ -39,19 +45,35 @@ export const ProductDetails = () => {
 
     return (
         <div className="py-12">
-            <Link to="/" className="mb-8 inline-flex items-center gap-2 font-mono text-sm hover:underline">
+            <Link to="/dark" className="mb-8 inline-flex items-center gap-2 font-mono text-sm hover:underline text-[#00ff00]">
                 <ArrowLeft className="h-4 w-4" />
                 VOLVER_AL_CATALOGO
             </Link>
 
             <div className="grid gap-12 lg:grid-cols-2">
-                {/* Image */}
-                <div className="aspect-square w-full overflow-hidden border border-black">
-                    <img
-                        src={product.image}
-                        alt={product.name}
-                        className="h-full w-full object-cover"
-                    />
+                {/* Image Gallery */}
+                <div className="space-y-4">
+                    <div className="aspect-square w-full overflow-hidden border border-[#00ff00]">
+                        <img
+                            src={selectedImage || product.images[0]}
+                            alt={product.name}
+                            className="h-full w-full object-cover"
+                        />
+                    </div>
+                    <div className="grid grid-cols-4 gap-4">
+                        {product.images.map((img, idx) => (
+                            <button
+                                key={idx}
+                                onClick={() => setSelectedImage(img)}
+                                className={clsx(
+                                    "aspect-square overflow-hidden border transition-all",
+                                    selectedImage === img ? "border-[#00ff00] opacity-100" : "border-[#00ff00]/30 opacity-50 hover:opacity-100 hover:border-[#00ff00]"
+                                )}
+                            >
+                                <img src={img} alt={`${product.name} view ${idx + 1}`} className="h-full w-full object-cover grayscale hover:grayscale-0 transition-all" />
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Info */}
@@ -66,13 +88,13 @@ export const ProductDetails = () => {
                         ${product.price.toFixed(2)}
                     </p>
 
-                    <div className="mb-8 border-t border-b border-black py-8">
+                    <div className="mb-6 border-t border-b border-black py-6">
                         <p className="font-mono text-gray-600 leading-relaxed">
                             {product.description}
                         </p>
                     </div>
 
-                    <div className="mt-auto space-y-6">
+                    <div className="space-y-6">
                         {isApparel && (
                             <div className="space-y-2">
                                 <label className="font-mono text-sm font-bold uppercase">Seleccionar Talla:</label>

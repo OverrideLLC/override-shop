@@ -1,12 +1,16 @@
 import { useSearchParams } from 'react-router-dom';
 import { useProducts } from '../../../shared/hooks/useProducts';
+import { useCategories } from '../../../shared/hooks/useCategories';
 import { ProductCard } from './ProductCard';
-import type { Category } from '../../../shared/data/products';
 
 export const ProductList = () => {
-    const { products, loading, error } = useProducts();
+    const { products, loading: productsLoading, error: productsError } = useProducts();
+    const { categories: allCategories, loading: categoriesLoading } = useCategories();
     const [searchParams] = useSearchParams();
     const selectedCategory = searchParams.get('category');
+
+    const loading = productsLoading || categoriesLoading;
+    const error = productsError;
 
     if (loading) {
         return (
@@ -25,7 +29,6 @@ export const ProductList = () => {
     }
 
     // Group by category for a structured layout
-    const allCategories: Category[] = ['Ropa', 'Accesorios', 'Mats'];
     const categories = selectedCategory
         ? allCategories.filter(c => c === selectedCategory)
         : allCategories;

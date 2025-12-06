@@ -34,13 +34,23 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             {/* Image Container */}
             <div className="relative aspect-square overflow-hidden border-b border-[#00ff00]">
                 <img
-                    src={product.image}
+                    src={product.images[0]}
                     alt={product.name}
                     className={clsx(
-                        "h-full w-full object-cover transition-all duration-500",
-                        isHovered ? "scale-105 grayscale-0" : "grayscale"
+                        "absolute inset-0 h-full w-full object-cover transition-all duration-500",
+                        isHovered && product.images[1] ? "opacity-0" : "opacity-100 scale-100"
                     )}
                 />
+                {product.images[1] && (
+                    <img
+                        src={product.images[1]}
+                        alt={product.name}
+                        className={clsx(
+                            "absolute inset-0 h-full w-full object-cover transition-all duration-500",
+                            isHovered ? "opacity-100 scale-105" : "opacity-0"
+                        )}
+                    />
+                )}
                 {!product.inStock && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
                         <span className="px-4 py-2 font-mono uppercase bg-[#00ff00] text-black">

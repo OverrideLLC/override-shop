@@ -12,6 +12,12 @@ export const ProductDetails = () => {
     const { product, loading, error } = useProduct(id);
     const { addItem } = useCart();
     const [selectedSize, setSelectedSize] = useState<string>('L');
+    const [selectedImage, setSelectedImage] = useState<string>('');
+
+    // Initialize selectedImage when product loads
+    if (product && !selectedImage && product.images.length > 0) {
+        setSelectedImage(product.images[0]);
+    }
 
     if (loading) {
         return (
@@ -45,13 +51,29 @@ export const ProductDetails = () => {
             </Link>
 
             <div className="grid gap-12 lg:grid-cols-2">
-                {/* Image */}
-                <div className="aspect-square w-full overflow-hidden rounded-3xl bg-gray-100 shadow-sm">
-                    <img
-                        src={product.image}
-                        alt={product.name}
-                        className="h-full w-full object-cover"
-                    />
+                {/* Image Gallery */}
+                <div className="space-y-4">
+                    <div className="aspect-[4/5] w-full overflow-hidden rounded-3xl bg-gray-100 shadow-sm">
+                        <img
+                            src={selectedImage || product.images[0]}
+                            alt={product.name}
+                            className="h-full w-full object-cover"
+                        />
+                    </div>
+                    <div className="grid grid-cols-4 gap-4">
+                        {product.images.map((img, idx) => (
+                            <button
+                                key={idx}
+                                onClick={() => setSelectedImage(img)}
+                                className={clsx(
+                                    "aspect-square overflow-hidden rounded-xl border-2 transition-all",
+                                    selectedImage === img ? "border-accent opacity-100" : "border-transparent opacity-70 hover:opacity-100"
+                                )}
+                            >
+                                <img src={img} alt={`${product.name} view ${idx + 1}`} className="h-full w-full object-cover" />
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Info */}
@@ -66,13 +88,13 @@ export const ProductDetails = () => {
                         ${product.price.toFixed(2)}
                     </p>
 
-                    <div className="mb-8 py-8 border-t border-b border-gray-100">
+                    <div className="mb-6 py-6 border-t border-b border-gray-100">
                         <p className="text-slate-600 leading-relaxed text-lg">
                             {product.description}
                         </p>
                     </div>
 
-                    <div className="mt-auto space-y-8">
+                    <div className="space-y-8">
                         {isApparel && (
                             <div className="space-y-4">
                                 <label className="text-sm font-bold uppercase tracking-wide text-slate-900">Seleccionar Talla</label>
