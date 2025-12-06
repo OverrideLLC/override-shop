@@ -4,7 +4,7 @@ const features = [
     {
         icon: Truck,
         title: 'Envío Gratis',
-        description: 'En pedidos superiores a $150'
+        description: 'A casi todo México'
     },
     {
         icon: ShieldCheck,

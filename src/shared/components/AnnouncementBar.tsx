@@ -10,7 +10,7 @@ export const AnnouncementBar = () => {
         <div className="relative bg-black text-white px-4 py-2 text-center border-b border-white/10 z-50">
             <div className="container mx-auto flex items-center justify-center relative">
                 <p className="text-xs md:text-sm font-bold uppercase tracking-widest font-mono">
-                    ENVIOS GRATIS A TODO MÉXICO.
+                    ENVIOS GRATIS A CASI TODO MÉXICO :)
                 </p>
                 <button
                     onClick={() => setIsVisible(false)}
