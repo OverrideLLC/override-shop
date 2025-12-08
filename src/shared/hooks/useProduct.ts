@@ -27,13 +27,17 @@ export const useProduct = (id: string | undefined) => {
 
                 // 2. Search for the product in each collection's 'items' subcollection
                 for (const colDoc of collectionsSnapshot.docs) {
-                    const productRef = doc(db, 'collections', colDoc.id, 'items', id);
+                    // CHANGED: Now searching in 'products' root collection
+                    const productRef = doc(db, 'products', colDoc.id, 'items', id);
                     const productSnap = await getDoc(productRef);
 
                     if (productSnap.exists()) {
+                        const data = productSnap.data();
                         foundProduct = {
                             id: productSnap.id,
-                            ...productSnap.data()
+                            ...data,
+                            // Ensure images array exists, fallback to legacy image field if needed - just like in useProducts
+                            images: data.images || (data.image ? [data.image] : [])
                         } as Product;
                         break; // Found it, stop searching
                     }

@@ -39,7 +39,8 @@ export const useProducts = () => {
                     console.log(`Found collection doc: ${collectionDoc.id} for ${targetCollectionName}`);
 
                     // 2. Fetch items from the subcollection
-                    const itemsRef = collection(db, 'collections', collectionDoc.id, 'items');
+                    // CHANGED: Now fetching from 'products' root collection instead of nested inside 'collections'
+                    const itemsRef = collection(db, 'products', collectionDoc.id, 'items');
                     const itemsSnapshot = await getDocs(itemsRef);
 
                     const firebaseProducts = itemsSnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => {
