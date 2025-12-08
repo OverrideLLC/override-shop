@@ -15,6 +15,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     const { addItem } = useCart();
     const [selectedSize, setSelectedSize] = useState<string>('L');
     const [isHovered, setIsHovered] = useState(false);
+    const [imageError, setImageError] = useState(false);
 
     const isApparel = product.category === 'Ropa';
 
@@ -33,24 +34,34 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         >
             {/* Image Container */}
             <div className="relative aspect-[4/5] overflow-hidden bg-gray-50 p-4">
-                <img
-                    src={product.images[0]}
-                    alt={product.name}
-                    className={clsx(
-                        "absolute inset-0 h-full w-full object-cover transition-all duration-700",
-                        isHovered && product.images[1] ? "opacity-0" : "opacity-100 scale-100"
-                    )}
-                />
-                {product.images[1] && (
-                    <img
-                        src={product.images[1]}
-                        alt={product.name}
-                        className={clsx(
-                            "absolute inset-0 h-full w-full object-cover transition-all duration-700",
-                            isHovered ? "opacity-100 scale-110" : "opacity-0"
+                {!imageError ? (
+                    <>
+                        <img
+                            src={product.images[0]}
+                            alt={product.name}
+                            onError={() => setImageError(true)}
+                            className={clsx(
+                                "absolute inset-0 h-full w-full object-cover transition-all duration-700",
+                                isHovered && product.images[1] ? "opacity-0" : "opacity-100 scale-100"
+                            )}
+                        />
+                        {product.images[1] && (
+                            <img
+                                src={product.images[1]}
+                                alt={product.name}
+                                className={clsx(
+                                    "absolute inset-0 h-full w-full object-cover transition-all duration-700",
+                                    isHovered ? "opacity-100 scale-110" : "opacity-0"
+                                )}
+                            />
                         )}
-                    />
+                    </>
+                ) : (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400">
+                        <span className="text-sm font-medium">No Image</span>
+                    </div>
                 )}
+
                 {!product.inStock && (
                     <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm z-10">
                         <span className="px-4 py-2 text-xs font-bold uppercase tracking-wider bg-gray-100 text-gray-500 rounded-full">
