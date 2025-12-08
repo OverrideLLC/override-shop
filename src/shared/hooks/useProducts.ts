@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs, type DocumentData, type QueryDocumentSnapshot } from 'firebase/firestore';
+import { collection, getDocs, query, where, type DocumentData, type QueryDocumentSnapshot } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import type { Product } from '../data/products';
 import { PRODUCTS as MOCK_PRODUCTS } from '../data/products';
@@ -14,22 +14,35 @@ export const useProducts = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             setLoading(true);
-            const collectionName = theme === 'dark' ? 'products_dark' : 'products';
-            const cacheKey = `products_${collectionName}`;
+            // Target collection name based on theme
+            const targetCollectionName = theme === 'dark' ? 'Dark' : 'Light';
+            const cacheKey = `products_${targetCollectionName}`;
 
             // Check cache
             const cachedData = sessionStorage.getItem(cacheKey);
             if (cachedData) {
-                console.log(`Using cached data for ${collectionName}`);
+                console.log(`Using cached data for ${targetCollectionName}`);
                 setProducts(JSON.parse(cachedData));
                 setLoading(false);
                 return;
             }
 
             try {
-                const querySnapshot = await getDocs(collection(db, collectionName));
+                // 1. Find the collection document by name
+                const collectionsRef = collection(db, 'collections');
+                const q = query(collectionsRef, where('name', '==', targetCollectionName));
+                const querySnapshot = await getDocs(q);
+
                 if (!querySnapshot.empty) {
-                    const firebaseProducts = querySnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => {
+                    // Assuming name is unique, take the first one
+                    const collectionDoc = querySnapshot.docs[0];
+                    console.log(`Found collection doc: ${collectionDoc.id} for ${targetCollectionName}`);
+
+                    // 2. Fetch items from the subcollection
+                    const itemsRef = collection(db, 'collections', collectionDoc.id, 'items');
+                    const itemsSnapshot = await getDocs(itemsRef);
+
+                    const firebaseProducts = itemsSnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => {
                         const data = doc.data();
                         return {
                             id: doc.id,
@@ -43,10 +56,12 @@ export const useProducts = () => {
                     sessionStorage.setItem(cacheKey, JSON.stringify(firebaseProducts));
                     setLoading(false);
                     return;
+                } else {
+                    console.warn(`No collection found for ${targetCollectionName}`);
                 }
 
-                // Fallback to mock data if no API key or empty/error
-                console.log(`Using mock data for ${theme} mode`);
+                // Fallback to mock data if no collection found or empty (skipping if found but empty subcollection for now, user can handle empty state)
+                console.log(`Using mock data for ${theme} mode (Fallback)`);
                 // Simulate network delay
                 setTimeout(() => {
                     let mockData: Product[];

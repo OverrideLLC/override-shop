@@ -71,7 +71,9 @@ async function seed() {
     console.log('🚀 Starting seed process...');
 
     try {
-        // Clear all collections
+        // Clear collections
+        await clearCollection('collections');
+        // We might want to clear 'products' too if we are abandoning it, but let's leave it alone or clear it to avoid confusion
         await clearCollection('products');
         await clearCollection('products_dark');
         await clearCollection('hero');
@@ -89,57 +91,65 @@ async function seed() {
             });
         }
 
-        // Seed Products (Light)
-        console.log('\n📦 Seeding Light Products...');
-        for (const product of PRODUCTS) {
-            console.log(`   Processing: ${product.name}`);
+        // Helper to seed a collection (Light/Dark)
+        const seedCollection = async (name: string, products: typeof PRODUCTS, isDark: boolean = false) => {
+            console.log(`\n📦 Seeding ${name} Collection...`);
 
-            // Upload all images
-            const imageUrls = [];
-            for (let i = 0; i < product.images.length; i++) {
-                const url = await uploadImage(product.images[i], `product_${product.id}_${i}`);
-                imageUrls.push(url);
+            // Create the main collection document first
+            const collectionRef = await addDoc(collection(db, 'collections'), {
+                name: name,
+                productIds: [], // Will update later
+                timeStamp: Math.floor(Date.now() / 1000).toString()
+            });
+
+            const productIds: string[] = [];
+            const itemsRef = collection(db, 'collections', collectionRef.id, 'items');
+
+            for (const product of products) {
+                console.log(`   Processing: ${isDark ? '[DARK] ' : ''}${product.name}`);
+
+                // Upload images
+                const imageUrls = [];
+                for (let i = 0; i < product.images.length; i++) {
+                    const url = await uploadImage(product.images[i], `product_${product.id}_${i}${isDark ? '_dark' : ''}`);
+                    imageUrls.push(url);
+                }
+
+                const productData = {
+                    ...product,
+                    name: isDark ? `[DARK] ${product.name}` : product.name,
+                    description: isDark ? `[TERMINAL_MODE] ${product.description}` : product.description,
+                    price: isDark ? Number((product.price * 1.2).toFixed(2)) : product.price,
+                    images: imageUrls,
+                    image: imageUrls[0], // Legacy support
+                    createdAt: new Date().toISOString()
+                };
+
+                // Add to 'items' subcollection
+                // We use addDoc to let Firestore generate the ID, or setDoc with product.id if we want consistent IDs
+                // Screenshot shows generated-looking IDs like "RPp..." which are 20 chars, likely auto-generated or specific
+                // Let's use addDoc for now as it's standard
+                const productDoc = await addDoc(itemsRef, productData);
+
+                // Update the product doc with its own ID if needed, but Firestore has it in metadata
+                // Screenshot shows 'id' field inside the doc matching the doc ID? 
+                // "id: RPp..." and Doc ID seems to be "RPp..." (from the header breadcrumb)
+                // To achieve this, we can setDoc with a custom ID or update the doc after creation.
+                // Let's generic addDoc and then update the 'id' field to match.
+                await setDoc(productDoc, { ...productData, id: productDoc.id }); // Ensure ID is in the data
+
+                productIds.push(productDoc.id);
             }
 
-            const productData = {
-                ...product,
-                images: imageUrls,
-                // Keep legacy image field for backward compatibility if needed, using first image
-                image: imageUrls[0],
-                createdAt: new Date().toISOString()
-            };
+            // Update parent collection doc with product IDs
+            await setDoc(collectionRef, { productIds }, { merge: true });
+        };
 
-            // Use setDoc to keep IDs consistent if needed, or addDoc
-            await addDoc(collection(db, 'products'), productData);
-        }
+        // Seed Light Collection
+        await seedCollection('Light', PRODUCTS, false);
 
-        // Seed Products (Dark)
-        console.log('\n📦 Seeding Dark Products...');
-        for (const product of PRODUCTS) {
-            console.log(`   Processing: [DARK] ${product.name}`);
-
-            // Re-upload images for dark mode (or reuse logic if we want separate storage)
-            // For now, we reuse the same source URLs but upload them again to ensure they exist/are tracked
-            // In a real app, we might just reference the same Cloudinary URLs if we stored them from the previous loop
-            // But to keep loops independent for now:
-            const imageUrls = [];
-            for (let i = 0; i < product.images.length; i++) {
-                const url = await uploadImage(product.images[i], `product_${product.id}_${i}`);
-                imageUrls.push(url);
-            }
-
-            const darkProductData = {
-                ...product,
-                name: `[DARK] ${product.name}`,
-                description: `[TERMINAL_MODE] ${product.description}`,
-                price: Number((product.price * 1.2).toFixed(2)),
-                images: imageUrls,
-                image: imageUrls[0],
-                createdAt: new Date().toISOString()
-            };
-
-            await addDoc(collection(db, 'products_dark'), darkProductData);
-        }
+        // Seed Dark Collection
+        await seedCollection('Dark', PRODUCTS, true);
 
         // Seed Hero (Light)
         console.log('\n🦸 Seeding Light Hero...');
