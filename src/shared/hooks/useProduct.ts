@@ -36,8 +36,11 @@ export const useProduct = (id: string | undefined) => {
                         foundProduct = {
                             id: productSnap.id,
                             ...data,
-                            // Ensure images array exists, fallback to legacy image field if needed - just like in useProducts
-                            images: data.images || (data.image ? [data.image] : [])
+                            // Ensure images array exists and is populated.
+                            // Fix: Check length > 0 to prevent empty array from blocking fallback to 'image'
+                            images: (Array.isArray(data.images) && data.images.length > 0)
+                                ? data.images
+                                : (data.image ? [data.image] : [])
                         } as Product;
                         break; // Found it, stop searching
                     }

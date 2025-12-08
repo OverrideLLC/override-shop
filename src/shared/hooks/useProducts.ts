@@ -48,8 +48,11 @@ export const useProducts = () => {
                         return {
                             id: doc.id,
                             ...data,
-                            // Ensure images array exists, fallback to legacy image field if needed
-                            images: data.images || (data.image ? [data.image] : [])
+                            // Ensure images array exists and is populated.
+                            // Fix: Check length > 0 to prevent empty array from blocking fallback to 'image'
+                            images: (Array.isArray(data.images) && data.images.length > 0)
+                                ? data.images
+                                : (data.image ? [data.image] : [])
                         };
                     }) as Product[];
 
