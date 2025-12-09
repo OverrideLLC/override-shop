@@ -7,10 +7,10 @@ import { useLocation } from 'react-router-dom';
 
 export const Layout = ({ children }: { children: ReactNode }) => {
     const location = useLocation();
-    const isHomePage = location.pathname === '/light' || location.pathname === '/light/';
+    const isHomePage = location.pathname === '/';
 
     return (
-        <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-black selection:text-white">
+        <div className="min-h-screen transition-colors duration-300">
             <Header />
             <CartSidebar />
             {isHomePage && <Hero />}

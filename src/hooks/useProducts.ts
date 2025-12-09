@@ -3,19 +3,18 @@ import { collection, getDocs, query, where, type DocumentData, type QueryDocumen
 import { db } from '../lib/firebase';
 import type { Product } from '../data/products';
 import { PRODUCTS as MOCK_PRODUCTS } from '../data/products';
-import { useTheme } from '../context/ThemeContext';
+import { useCollection } from '../context/CollectionContext';
 
 export const useProducts = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error] = useState<string | null>(null);
-    const { theme } = useTheme();
+    const { currentCollection } = useCollection();
 
     useEffect(() => {
         const fetchProducts = async () => {
             setLoading(true);
-            // Target collection name based on theme
-            const targetCollectionName = theme === 'dark' ? 'Dark' : 'Light';
+            const targetCollectionName = currentCollection;
             const cacheKey = `products_${targetCollectionName}`;
 
             // Check cache
@@ -30,16 +29,14 @@ export const useProducts = () => {
             try {
                 // 1. Find the collection document by name
                 const collectionsRef = collection(db, 'collections');
+                // We need to query by name because the collection ID is auto-generated or unknown
                 const q = query(collectionsRef, where('name', '==', targetCollectionName));
                 const querySnapshot = await getDocs(q);
 
                 if (!querySnapshot.empty) {
-                    // Assuming name is unique, take the first one
                     const collectionDoc = querySnapshot.docs[0];
                     console.log(`Found collection doc: ${collectionDoc.id} for ${targetCollectionName}`);
 
-                    // 2. Fetch items from the subcollection
-                    // CHANGED: Now fetching from 'products' root collection instead of nested inside 'collections'
                     const itemsRef = collection(db, 'products', collectionDoc.id, 'items');
                     const itemsSnapshot = await getDocs(itemsRef);
 
@@ -48,8 +45,6 @@ export const useProducts = () => {
                         return {
                             id: doc.id,
                             ...data,
-                            // Ensure images array exists and is populated.
-                            // Fix: Check length > 0 to prevent empty array from blocking fallback to 'image'
                             images: (Array.isArray(data.images) && data.images.length > 0)
                                 ? data.images
                                 : (data.image ? [data.image] : [])
@@ -64,18 +59,16 @@ export const useProducts = () => {
                     console.warn(`No collection found for ${targetCollectionName}`);
                 }
 
-                // Fallback to mock data if no collection found or empty (skipping if found but empty subcollection for now, user can handle empty state)
-                console.log(`Using mock data for ${theme} mode (Fallback)`);
-                // Simulate network delay
+                // Fallback to mock data
+                console.log(`Using mock data for ${targetCollectionName} (Fallback)`);
                 setTimeout(() => {
                     let mockData: Product[];
-                    if (theme === 'dark') {
-                        // Create "Dark" versions of products for mock
+                    if (targetCollectionName === 'Dark') {
                         mockData = MOCK_PRODUCTS.map(p => ({
                             ...p,
                             name: `[DARK] ${p.name}`,
                             description: `[TERMINAL_MODE] ${p.description}`,
-                            price: p.price * 1.2 // Slightly different price to be noticeable
+                            price: p.price * 1.2
                         }));
                     } else {
                         mockData = MOCK_PRODUCTS;
@@ -88,7 +81,7 @@ export const useProducts = () => {
             } catch (err) {
                 console.warn('Firebase connection failed or not configured, using mock data.', err);
                 let mockData: Product[];
-                if (theme === 'dark') {
+                if (targetCollectionName === 'Dark') {
                     mockData = MOCK_PRODUCTS.map(p => ({
                         ...p,
                         name: `[DARK] ${p.name}`,
@@ -104,7 +97,7 @@ export const useProducts = () => {
         };
 
         fetchProducts();
-    }, [theme]); // Re-fetch when theme changes
+    }, [currentCollection]);
 
     return { products, loading, error };
 };
