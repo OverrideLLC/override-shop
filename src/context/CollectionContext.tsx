@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { fetchWithCache } from '../lib/cache';
 
 interface CollectionContextType {
     collections: string[];
@@ -20,16 +21,24 @@ export const CollectionProvider = ({ children }: { children: ReactNode }) => {
 
     const fetchCollections = async () => {
         try {
-            const querySnapshot = await getDocs(collection(db, 'collections'));
-            const fetchedCollections = querySnapshot.docs.map(doc => doc.data().name as string);
+            const data = await fetchWithCache<string[]>('collections_list', async () => {
+                try {
+                    const querySnapshot = await getDocs(collection(db, 'collections'));
+                    const fetchedCollections = querySnapshot.docs.map(doc => doc.data().name as string);
 
-            // Ensure we have at least 'Dark' and 'Light' if DB is empty/incomplete for now
-            const defaultCollections = ['Dark', 'Light'];
-            const uniqueCollections = Array.from(new Set([...defaultCollections, ...fetchedCollections]));
+                    // Ensure we have at least 'Dark' and 'Light'
+                    const defaultCollections = ['Dark', 'Light'];
+                    const uniqueCollections = Array.from(new Set([...defaultCollections, ...fetchedCollections]));
+                    return uniqueCollections;
+                } catch (error) {
+                    console.error("Failed to fetch collections from DB:", error);
+                    return ['Dark', 'Light'];
+                }
+            }, 20); // 20m TTL
 
-            setCollections(uniqueCollections);
+            setCollections(data);
         } catch (error) {
-            console.error("Failed to fetch collections:", error);
+            console.error("Critical error in CollectionContext:", error);
             // Fallback
             setCollections(['Dark', 'Light']);
         } finally {
