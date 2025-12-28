@@ -15,7 +15,10 @@ const CollectionContext = createContext<CollectionContextType | undefined>(undef
 export const CollectionProvider = ({ children }: { children: ReactNode }) => {
     const [collections, setCollections] = useState<string[]>([]);
     const [currentCollection, setCurrentCollection] = useState<string>(() => {
-        return localStorage.getItem('currentCollection') || 'Dark';
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('currentCollection') || 'Dark';
+        }
+        return 'Dark';
     });
     const [loading, setLoading] = useState(true);
 
@@ -51,7 +54,9 @@ export const CollectionProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     useEffect(() => {
-        localStorage.setItem('currentCollection', currentCollection);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('currentCollection', currentCollection);
+        }
 
         // Theme switching logic
         const root = window.document.documentElement;

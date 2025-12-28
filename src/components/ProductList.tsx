@@ -1,3 +1,5 @@
+'use client';
+
 import { useProducts } from '../hooks/useProducts';
 import { useCategories } from '../hooks/useCategories';
 import { ProductCard } from './ProductCard';

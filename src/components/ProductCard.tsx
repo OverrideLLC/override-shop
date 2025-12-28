@@ -1,11 +1,15 @@
+'use client';
+
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
 import type { Product } from '../data/products';
 import { useCart } from '../context/CartContext';
 import { clsx } from 'clsx';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+import { optimizeImage } from '../lib/cloudinary';
 
 interface ProductCardProps {
+
     product: Product;
 }
 
@@ -26,7 +30,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
     return (
         <Link
-            to={`/product/${product.id}`}
+            href={`/product/${product.id}`}
             className="group relative flex flex-col h-full border border-gray-200 dark:border-[#00ff00] bg-white dark:bg-black p-4 rounded-none transition-all duration-300 hover:shadow-lg dark:hover:shadow-none dark:hover:border-[#00ff00]"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -34,7 +38,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             {/* Image Container */}
             <div className="relative aspect-square overflow-hidden border-b border-gray-200 dark:border-[#00ff00]">
                 <img
-                    src={product.images[0]}
+                    src={optimizeImage(product.images[0])}
                     alt={product.name}
                     className={clsx(
                         "absolute inset-0 h-full w-full object-cover transition-all duration-500",
@@ -43,7 +47,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                 />
                 {product.images[1] && (
                     <img
-                        src={product.images[1]}
+                        src={optimizeImage(product.images[1])}
                         alt={product.name}
                         className={clsx(
                             "absolute inset-0 h-full w-full object-cover transition-all duration-500",

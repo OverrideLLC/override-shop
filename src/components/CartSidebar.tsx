@@ -1,4 +1,6 @@
-import { X, Trash2, MessageCircle } from 'lucide-react';
+'use client';
+
+import { X, Minus, Plus, ShoppingBag, Trash2, MessageCircle } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { clsx } from 'clsx';
 

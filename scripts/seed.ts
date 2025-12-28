@@ -1,7 +1,7 @@
 import { v2 as cloudinary } from 'cloudinary';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, setDoc } from 'firebase/firestore';
-import { PRODUCTS } from '../src/shared/data/products';
+import { PRODUCTS } from '../src/data/products';
 import * as dotenv from 'dotenv';
 
 dotenv.config();

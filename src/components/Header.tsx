@@ -1,7 +1,10 @@
+'use client';
+
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useCollection } from '../context/CollectionContext';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+
 import { useState } from 'react';
 
 export const Header = () => {
@@ -40,7 +43,7 @@ export const Header = () => {
 
                 {/* Center Logo */}
                 <div className="flex items-center justify-center gap-2 w-full md:w-1/3">
-                    <Link to="/" className="flex items-center gap-2">
+                    <Link href="/" className="flex items-center gap-2">
                         <span className="text-xl font-bold tracking-tighter text-slate-900 dark:text-[#00ff00]">@Override fun Shop()</span>
                     </Link>
                 </div>

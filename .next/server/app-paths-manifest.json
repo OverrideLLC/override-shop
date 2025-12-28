@@ -1,0 +1,7 @@
+{
+  "/api/revalidate/route": "app/api/revalidate/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/product/[id]/page": "app/product/[id]/page.js",
+  "/products/page": "app/products/page.js",
+  "/page": "app/page.js"
+}
