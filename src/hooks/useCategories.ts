@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { collection, getDocs, type DocumentData, type QueryDocumentSnapshot } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { fetchWithCache } from '../lib/cache';
 
 export interface CategoryData {
     id: string;
@@ -16,33 +15,39 @@ export const useCategories = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             setLoading(true);
-            const cacheKey = 'categories_cache'; // Key for cache utility
+            const cacheKey = 'categories_cache';
+
+            // Check cache
+            const cachedData = sessionStorage.getItem(cacheKey);
+            if (cachedData) {
+                console.log('Using cached categories');
+                setCategories(JSON.parse(cachedData));
+                setLoading(false);
+                return;
+            }
 
             try {
-                const data = await fetchWithCache<string[]>(cacheKey, async () => {
-                    try {
-                        const querySnapshot = await getDocs(collection(db, 'categories'));
-                        if (!querySnapshot.empty) {
-                            const firebaseCategories = querySnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => doc.data().name as string);
-                            firebaseCategories.sort();
-                            return firebaseCategories;
-                        }
+                const querySnapshot = await getDocs(collection(db, 'categories'));
+                if (!querySnapshot.empty) {
+                    const firebaseCategories = querySnapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => doc.data().name as string);
 
-                        // If empty, return fallback without erroring, but this makes it "fresh" empty data
-                        console.warn('No categories found in Firestore.');
-                        return [];
-                    } catch (err) {
-                        console.warn('Failed to fetch categories from Firestore.', err);
-                        // Return default static list on error
-                        return ['Ropa', 'Accesorios', 'Mats'];
-                    }
-                }, 20); // 20m TTL
+                    // Sort alphabetically or by some other logic if needed
+                    firebaseCategories.sort();
 
-                setCategories(data);
+                    setCategories(firebaseCategories);
+                    sessionStorage.setItem(cacheKey, JSON.stringify(firebaseCategories));
+                    setLoading(false);
+                    return;
+                }
+
+                // Fallback if empty (shouldn't happen after seed)
+                console.warn('No categories found in Firestore.');
+                setCategories([]);
                 setLoading(false);
+
             } catch (err) {
-                console.error("Critical error in useCategories:", err);
-                // Final fallback
+                console.warn('Failed to fetch categories from Firestore.', err);
+                // Fallback to hardcoded list if offline/error
                 setCategories(['Ropa', 'Accesorios', 'Mats']);
                 setLoading(false);
             }
