@@ -11,6 +11,7 @@ const nextConfig = {
             },
         ],
     },
+    distDir: 'dist', // Output to dist for Vercel compatibility (migrated from Vite)
 };
 
 export default nextConfig;
