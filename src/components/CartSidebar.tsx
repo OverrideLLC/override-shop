@@ -1,6 +1,7 @@
 'use client';
 
-import { X, Minus, Plus, ShoppingBag, Trash2, MessageCircle } from 'lucide-react';
+import { X, Trash2, MessageCircle } from 'lucide-react';
+import Image from 'next/image';
 import { useCart } from '../context/CartContext';
 import { clsx } from 'clsx';
 
@@ -46,11 +47,14 @@ export const CartSidebar = () => {
                             <div className="space-y-4">
                                 {items.map((item) => (
                                     <div key={`${item.id}-${item.selectedSize}`} className="flex gap-4 border border-[#00ff00] p-3 rounded-none">
-                                        <img
-                                            src={item.images[0]}
-                                            alt={item.name}
-                                            className="h-20 w-20 object-cover rounded-none border border-[#00ff00]"
-                                        />
+                                        <div className="relative h-20 w-20 flex-shrink-0">
+                                            <Image
+                                                src={item.images[0]}
+                                                alt={item.name}
+                                                fill
+                                                className="object-cover rounded-none border border-[#00ff00]"
+                                            />
+                                        </div>
                                         <div className="flex-1">
                                             <h3 className="font-bold text-sm text-[#00ff00]">{item.name}</h3>
                                             <p className="font-mono text-xs text-[#00ff00]/70">

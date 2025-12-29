@@ -85,7 +85,7 @@ export async function fetchWithCache<T>(
                     return entry.data;
                 }
             }
-        } catch (_) { /* ignore */ }
+        } catch { /* ignore */ }
 
         throw error;
     }

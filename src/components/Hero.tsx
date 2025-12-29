@@ -2,6 +2,7 @@
 
 import { Terminal } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useHero } from '../hooks/useHero';
 
 import { optimizeImage } from '../lib/cloudinary';
@@ -48,10 +49,12 @@ export const Hero = (props: HeroProps) => {
             {/* Background Image if present */}
             {heroData.imageUrl && (
                 <div className="absolute inset-0 z-0 opacity-20 dark:opacity-40">
-                    <img
+                    <Image
                         src={optimizeImage(heroData.imageUrl)}
                         alt="Hero Background"
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
+                        priority
                     />
                 </div>
             )}

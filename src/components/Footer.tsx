@@ -1,4 +1,5 @@
 import { Github, Twitter, Instagram } from 'lucide-react';
+import Image from 'next/image';
 
 export const Footer = () => {
     return (
@@ -8,7 +9,13 @@ export const Footer = () => {
                     {/* Brand */}
                     <div className="flex flex-col gap-4">
                         <div className="flex items-center gap-2">
-                            <img src="https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/logos/Overridelogo.svg" alt="Override Logo" className="h-6 w-6 dark:brightness-0 dark:invert dark:sepia dark:saturate-[5000%] dark:hue-rotate-[80deg]" />
+                            <Image
+                                src="https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/logos/Overridelogo.svg"
+                                alt="Override Logo"
+                                width={24}
+                                height={24}
+                                className="dark:brightness-0 dark:invert dark:sepia dark:saturate-[5000%] dark:hue-rotate-[80deg]"
+                            />
                             <span className="font-bold tracking-tighter">@Override</span>
                         </div>
                     </div>

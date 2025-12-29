@@ -6,6 +6,7 @@ import type { Product } from '../data/products';
 import { useCart } from '../context/CartContext';
 import { clsx } from 'clsx';
 import Link from 'next/link';
+import Image from 'next/image';
 import { optimizeImage } from '../lib/cloudinary';
 
 interface ProductCardProps {
@@ -37,20 +38,24 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         >
             {/* Image Container */}
             <div className="relative aspect-square overflow-hidden border-b border-gray-200 dark:border-[#00ff00]">
-                <img
+                <Image
                     src={optimizeImage(product.images[0])}
                     alt={product.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className={clsx(
-                        "absolute inset-0 h-full w-full object-cover transition-all duration-500",
+                        "object-cover transition-all duration-500",
                         isHovered && product.images[1] ? "opacity-0" : "opacity-100 scale-100"
                     )}
                 />
                 {product.images[1] && (
-                    <img
+                    <Image
                         src={optimizeImage(product.images[1])}
                         alt={product.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className={clsx(
-                            "absolute inset-0 h-full w-full object-cover transition-all duration-500",
+                            "object-cover transition-all duration-500",
                             isHovered ? "opacity-100 scale-105" : "opacity-0"
                         )}
                     />

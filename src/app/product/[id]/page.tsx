@@ -7,6 +7,8 @@ import { useProduct } from '../../../hooks/useProduct';
 import { useCart } from '../../../context/CartContext';
 import { useState } from 'react';
 import { clsx } from 'clsx';
+import Image from 'next/image';
+import { optimizeImage } from '../../../lib/cloudinary';
 
 const SIZES = ['S', 'M', 'L', 'XL', '2XL'];
 
@@ -57,11 +59,13 @@ export default function ProductDetailsPage() {
             <div className="grid gap-12 lg:grid-cols-2">
                 {/* Image Gallery */}
                 <div className="space-y-4">
-                    <div className="aspect-square w-full overflow-hidden border border-[#00ff00]">
-                        <img
-                            src={selectedImage || product.images[0]}
+                    <div className="aspect-square w-full overflow-hidden border border-[#00ff00] relative">
+                        <Image
+                            src={optimizeImage(selectedImage || product.images[0])}
                             alt={product.name}
-                            className="h-full w-full object-cover"
+                            fill
+                            className="object-cover"
+                            priority
                         />
                     </div>
                     <div className="grid grid-cols-4 gap-4">
@@ -70,11 +74,16 @@ export default function ProductDetailsPage() {
                                 key={idx}
                                 onClick={() => setSelectedImage(img)}
                                 className={clsx(
-                                    "aspect-square overflow-hidden border transition-all",
+                                    "aspect-square overflow-hidden border transition-all relative",
                                     selectedImage === img ? "border-[#00ff00] opacity-100" : "border-[#00ff00]/30 opacity-50 hover:opacity-100 hover:border-[#00ff00]"
                                 )}
                             >
-                                <img src={img} alt={`${product.name} view ${idx + 1}`} className="h-full w-full object-cover grayscale hover:grayscale-0 transition-all" />
+                                <Image
+                                    src={optimizeImage(img)}
+                                    alt={`${product.name} view ${idx + 1}`}
+                                    fill
+                                    className="object-cover grayscale hover:grayscale-0 transition-all"
+                                />
                             </button>
                         ))}
                     </div>
@@ -136,7 +145,8 @@ export default function ProductDetailsPage() {
 
                         {!product.inStock && (
                             <p className="text-center font-mono text-sm text-red-600">
-                // EXCEPCION_AGOTADO
+                                {/* eslint-disable-next-line react/jsx-no-comment-textnodes */}
+                                &quot;// EXCEPCION_AGOTADO&quot;
                             </p>
                         )}
                     </div>
