@@ -1,7 +1,7 @@
 {
-  "/api/revalidate/route": "/api/revalidate",
   "/_not-found/page": "/_not-found",
-  "/product/[id]/page": "/product/[id]",
+  "/api/revalidate/route": "/api/revalidate",
   "/products/page": "/products",
+  "/product/[id]/page": "/product/[id]",
   "/page": "/"
 }
